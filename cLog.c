@@ -14,6 +14,9 @@ char *s_cLogLevelToColors[CLOG_VAL_LEN] = { CLOG_COLOR_DEFAULT, CLOG_COLOR_CRITI
 #ifdef CLOG_PRINT_DETAILS_ID
 #    if CLOG_PRINT_DETAILS_ID == CLOG_PRINT_DETAILS_ID_DEFAULT
 #        include <time.h>
+#        ifdef CLOG_PRINT_DETAILS_FILENAME_TYPE
+#        include <string.h>
+#        endif
 
 void cLog_print_details(const CLogger_t *                                     logger,
                         CLogLevel_t logLevel CLOG_PRINT_DETAILS_FILENAME_TYPE CLOG_PRINT_DETAILS_LINENUMBER_TYPE)
@@ -22,13 +25,25 @@ void cLog_print_details(const CLogger_t *                                     lo
     struct tm *tm_info;
     time(&timer);
     tm_info = localtime(&timer);
+#        ifdef CLOG_PRINT_DETAILS_FILENAME_TYPE
+    const char *fName = strrchr(fileName, '/');
+
+    if (fName == NULL)
+    {
+        fName = fileName;
+    }
+    else
+    {
+        fName = &(fName[1]);
+    }
+#        endif
 #        if defined(CLOG_PRINT_DETAILS_FILENAME_TYPE) && defined(CLOG_PRINT_DETAILS_LINENUMBER_TYPE)
     CLOG_PRINT_FUNC("%04d.%02d.%02d %02d:%02d:%02d>%s%s%s>%s>%s>%d:", 1900+tm_info->tm_year, tm_info->tm_mon, tm_info->tm_mday,
-                    tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, s_cLogLevelToColors[logLevel], s_cLogLevelToString[logLevel], s_cLogLevelToColors[0], fileName,
+                    tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, s_cLogLevelToColors[logLevel], s_cLogLevelToString[logLevel], s_cLogLevelToColors[0], fName,
                     logger->logName, lineNumber);
 #        elif defined(CLOG_PRINT_DETAILS_FILENAME_TYPE)
     CLOG_PRINT_FUNC("%04d.%02d.%02d %02d:%02d:%02d>%s%s%s>%s>%s:", 1900+tm_info->tm_year, tm_info->tm_mon, tm_info->tm_mday,
-                    tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, s_cLogLevelToColors[logLevel], s_cLogLevelToString[logLevel], s_cLogLevelToColors[0], fileName,
+                    tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, s_cLogLevelToColors[logLevel], s_cLogLevelToString[logLevel], s_cLogLevelToColors[0], fName,
                     logger->logName);
 #        else
     CLOG_PRINT_FUNC("%04d.%02d.%02d %02d:%02d:%02d>%s%s%s>%s>%d:", 1900+tm_info->tm_year, tm_info->tm_mon, tm_info->tm_mday,
