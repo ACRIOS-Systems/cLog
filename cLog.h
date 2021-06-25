@@ -56,7 +56,6 @@
     CLOG_PRINT_FUNC(__VA_ARGS__);
 
 /* cLog declarations bellow */
-
 typedef enum
 {
     CLOG_VAL_NONE     = 0,
@@ -76,6 +75,7 @@ typedef struct
 } CLogger_t;
 
 extern char *s_cLogLevelToString[CLOG_VAL_LEN];
+extern char *s_cLogLevelToColors[CLOG_VAL_LEN];
 
 #define CLOG_SET_LOGNAME(logger, name)   (logger)->logName = (name);
 #define CLOG_SET_LOGLEVEL(logger, level) (logger)->logLevel = (level);

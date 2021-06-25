@@ -8,7 +8,8 @@
 
 #include "cLog.h"
 
-char *s_cLogLevelToString[CLOG_VAL_LEN] = { "NONE", "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG", "TRACE" };
+char *s_cLogLevelToString[CLOG_VAL_LEN] = { "", CLOG_STRING_CRITICAL, CLOG_STRING_ERROR, CLOG_STRING_WARNING, CLOG_STRING_INFO, CLOG_STRING_DEBUG, CLOG_STRING_TRACE };
+char *s_cLogLevelToColors[CLOG_VAL_LEN] = { CLOG_COLOR_DEFAULT, CLOG_COLOR_CRITICAL, CLOG_COLOR_ERROR, CLOG_COLOR_WARNING, CLOG_COLOR_INFO, CLOG_COLOR_DEBUG, CLOG_COLOR_TRACE };
 
 #ifdef CLOG_PRINT_DETAILS_ID
 #    if CLOG_PRINT_DETAILS_ID == CLOG_PRINT_DETAILS_ID_DEFAULT
@@ -21,17 +22,17 @@ void cLog_print_details(const CLogger_t *                                     lo
     struct tm *tm_info;
     time(&timer);
     tm_info = localtime(&timer);
-#        if defined(CLOG_PRINT_DETAILS_FILENAME_TYPE) and defined(CLOG_PRINT_DETAILS_LINENUMBER_TYPE)
-    CLOG_PRINT_FUNC("%04d.%02d.%02d  %02d:%02d:%02d>%s>%s>%s>%d:", tm_info->tm_year, tm_info->tm_mon, tm_info->tm_mday,
-                    tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, s_cLogLevelToString[logLevel], fileName,
+#        if defined(CLOG_PRINT_DETAILS_FILENAME_TYPE) && defined(CLOG_PRINT_DETAILS_LINENUMBER_TYPE)
+    CLOG_PRINT_FUNC("%04d.%02d.%02d %02d:%02d:%02d>%s%s%s>%s>%s>%d:", 1900+tm_info->tm_year, tm_info->tm_mon, tm_info->tm_mday,
+                    tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, s_cLogLevelToColors[logLevel], s_cLogLevelToString[logLevel], s_cLogLevelToColors[0], fileName,
                     logger->logName, lineNumber);
 #        elif defined(CLOG_PRINT_DETAILS_FILENAME_TYPE)
-    CLOG_PRINT_FUNC("%04d.%02d.%02d  %02d:%02d:%02d>%s>%s>%s:", tm_info->tm_year, tm_info->tm_mon, tm_info->tm_mday,
-                    tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, s_cLogLevelToString[logLevel], fileName,
+    CLOG_PRINT_FUNC("%04d.%02d.%02d %02d:%02d:%02d>%s%s%s>%s>%s:", 1900+tm_info->tm_year, tm_info->tm_mon, tm_info->tm_mday,
+                    tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, s_cLogLevelToColors[logLevel], s_cLogLevelToString[logLevel], s_cLogLevelToColors[0], fileName,
                     logger->logName);
 #        else
-    CLOG_PRINT_FUNC("%04d.%02d.%02d  %02d:%02d:%02d>%s>%s>%d:", tm_info->tm_year, tm_info->tm_mon, tm_info->tm_mday,
-                    tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, s_cLogLevelToString[logLevel], logger->logName,
+    CLOG_PRINT_FUNC("%04d.%02d.%02d %02d:%02d:%02d>%s%s%s>%s>%d:", 1900+tm_info->tm_year, tm_info->tm_mon, tm_info->tm_mday,
+                    tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, s_cLogLevelToColors[logLevel], s_cLogLevelToString[logLevel], s_cLogLevelToColors[0], logger->logName,
                     lineNumber);
 #        endif
 }
