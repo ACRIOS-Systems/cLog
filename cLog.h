@@ -80,10 +80,16 @@ extern char *s_cLogLevelToColors[CLOG_VAL_LEN];
 #define CLOG_SET_LOGNAME(logger, name)   (logger)->logName = (name);
 #define CLOG_SET_LOGLEVEL(logger, level) (logger)->logLevel = (level);
 
-#define CLOG_CRITICAL(logger, ...)                                           \
-    if (logger->logLevel >= CLOG_VAL_CRITICAL)                               \
-    {                                                                        \
-        CLOG_LOG(logger, CLOG_VAL_CRITICAL, __FILE__, __LINE__, __VA_ARGS__) \
+#ifdef __FILENAME__
+#    define __CUSTOM_FILENAME__ __FILENAME__
+#else
+#    define __CUSTOM_FILENAME__ __FILE__
+#endif
+
+#define CLOG_CRITICAL(logger, ...)                                                      \
+    if (logger->logLevel >= CLOG_VAL_CRITICAL)                                          \
+    {                                                                                   \
+        CLOG_LOG(logger, CLOG_VAL_CRITICAL, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__) \
     }
 
 #define CLOG_CRITICAL_LOG_ONLY(logger, ...)    \
@@ -92,10 +98,10 @@ extern char *s_cLogLevelToColors[CLOG_VAL_LEN];
         CLOG_PRINT_FUNC(__VA_ARGS__);          \
     }
 
-#define CLOG_ERROR(logger, ...)                                           \
-    if (logger->logLevel >= CLOG_VAL_ERROR)                               \
-    {                                                                     \
-        CLOG_LOG(logger, CLOG_VAL_ERROR, __FILE__, __LINE__, __VA_ARGS__) \
+#define CLOG_ERROR(logger, ...)                                                      \
+    if (logger->logLevel >= CLOG_VAL_ERROR)                                          \
+    {                                                                                \
+        CLOG_LOG(logger, CLOG_VAL_ERROR, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__) \
     }
 
 #define CLOG_ERROR_LOG_ONLY(logger, ...)    \
@@ -104,10 +110,10 @@ extern char *s_cLogLevelToColors[CLOG_VAL_LEN];
         CLOG_PRINT_FUNC(__VA_ARGS__);       \
     }
 
-#define CLOG_WARNING(logger, ...)                                           \
-    if (logger->logLevel >= CLOG_VAL_WARNING)                               \
-    {                                                                       \
-        CLOG_LOG(logger, CLOG_VAL_WARNING, __FILE__, __LINE__, __VA_ARGS__) \
+#define CLOG_WARNING(logger, ...)                                                      \
+    if (logger->logLevel >= CLOG_VAL_WARNING)                                          \
+    {                                                                                  \
+        CLOG_LOG(logger, CLOG_VAL_WARNING, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__) \
     }
 
 #define CLOG_WARNING_LOG_ONLY(logger, ...)    \
@@ -116,10 +122,10 @@ extern char *s_cLogLevelToColors[CLOG_VAL_LEN];
         CLOG_PRINT_FUNC(__VA_ARGS__);         \
     }
 
-#define CLOG_INFO(logger, ...)                                           \
-    if (logger->logLevel >= CLOG_VAL_INFO)                               \
-    {                                                                    \
-        CLOG_LOG(logger, CLOG_VAL_INFO, __FILE__, __LINE__, __VA_ARGS__) \
+#define CLOG_INFO(logger, ...)                                                      \
+    if (logger->logLevel >= CLOG_VAL_INFO)                                          \
+    {                                                                               \
+        CLOG_LOG(logger, CLOG_VAL_INFO, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__) \
     }
 
 #define CLOG_INFO_LOG_ONLY(logger, ...)    \
@@ -128,10 +134,10 @@ extern char *s_cLogLevelToColors[CLOG_VAL_LEN];
         CLOG_PRINT_FUNC(__VA_ARGS__);      \
     }
 
-#define CLOG_DEBUG(logger, ...)                                           \
-    if (logger->logLevel >= CLOG_VAL_DEBUG)                               \
-    {                                                                     \
-        CLOG_LOG(logger, CLOG_VAL_DEBUG, __FILE__, __LINE__, __VA_ARGS__) \
+#define CLOG_DEBUG(logger, ...)                                                      \
+    if (logger->logLevel >= CLOG_VAL_DEBUG)                                          \
+    {                                                                                \
+        CLOG_LOG(logger, CLOG_VAL_DEBUG, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__) \
     }
 
 #define CLOG_DEBUG_LOG_ONLY(logger, ...)    \
@@ -140,10 +146,10 @@ extern char *s_cLogLevelToColors[CLOG_VAL_LEN];
         CLOG_PRINT_FUNC(__VA_ARGS__);       \
     }
 
-#define CLOG_TRACE(logger, ...)                                           \
-    if (logger->logLevel >= CLOG_VAL_TRACE)                               \
-    {                                                                     \
-        CLOG_LOG(logger, CLOG_VAL_TRACE, __FILE__, __LINE__, __VA_ARGS__) \
+#define CLOG_TRACE(logger, ...)                                                      \
+    if (logger->logLevel >= CLOG_VAL_TRACE)                                          \
+    {                                                                                \
+        CLOG_LOG(logger, CLOG_VAL_TRACE, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__) \
     }
 
 #define CLOG_TRACE_LOG_ONLY(logger, ...)    \

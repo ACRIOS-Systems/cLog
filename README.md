@@ -86,3 +86,8 @@ int main(void)
     return retval;
 }
 ```
+
+## tips
+
+Define `__FILENAME__` flag for compilator. In this case less memory and runtime code is used. For example CMakeList may be updated similarly to:
+`set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -D__FILENAME__='\"$(notdir $(abspath $<))\"'")`

@@ -26,8 +26,11 @@ void cLog_print_details(const CLogger_t *                                     lo
     time(&timer);
     tm_info = localtime(&timer);
 #        ifdef CLOG_PRINT_DETAILS_FILENAME_TYPE
-    const char *fName = strrchr(fileName, '/');
+    const char *fName = NULL;
 
+#ifdef __FILENAME__
+    fName = fileName;
+#else
     if (fName == NULL)
     {
         fName = fileName;
@@ -36,6 +39,7 @@ void cLog_print_details(const CLogger_t *                                     lo
     {
         fName = &(fName[1]);
     }
+#endif
 #        endif
 #        if defined(CLOG_PRINT_DETAILS_FILENAME_TYPE) && defined(CLOG_PRINT_DETAILS_LINENUMBER_TYPE)
     CLOG_PRINT_FUNC("%04d.%02d.%02d %02d:%02d:%02d>%s%s%s>%s>%s>%d:", 1900+tm_info->tm_year, tm_info->tm_mon, tm_info->tm_mday,
