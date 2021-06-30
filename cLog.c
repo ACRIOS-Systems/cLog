@@ -14,9 +14,6 @@ char *s_cLogLevelToColors[CLOG_VAL_LEN] = { CLOG_COLOR_DEFAULT, CLOG_COLOR_CRITI
 #ifdef CLOG_PRINT_DETAILS_ID
 #    if CLOG_PRINT_DETAILS_ID == CLOG_PRINT_DETAILS_ID_DEFAULT
 #        include <time.h>
-#        ifdef CLOG_PRINT_DETAILS_FILENAME_TYPE
-#        include <string.h>
-#        endif
 
 void cLog_print_details(const CLogger_t *                                     logger,
                         CLogLevel_t logLevel CLOG_PRINT_DETAILS_FILENAME_TYPE CLOG_PRINT_DETAILS_LINENUMBER_TYPE)
