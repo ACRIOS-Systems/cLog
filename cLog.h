@@ -82,6 +82,10 @@ extern char *s_cLogLevelToColors[CLOG_VAL_LEN];
 
 #ifdef __FILENAME__
 #    define __CUSTOM_FILENAME__ __FILENAME__
+#elif defined(__FILE_NAME__)
+#    define __CUSTOM_FILENAME__ __FILE_NAME__
+#elif defined(__BASE_FILE__)
+#    define __CUSTOM_FILENAME__ __BASE_FILE__
 #else
 #    define __CUSTOM_FILENAME__ __FILE__
 #endif
