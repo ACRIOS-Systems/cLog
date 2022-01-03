@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-
+#error
 /* VALUES DEFINITION START */
 #define CLOG_PRINT_DETAILS_ID_DEFAULT 0
 #define CLOG_PRINT_DETAILS_ID_USER    1
