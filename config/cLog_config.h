@@ -5,7 +5,10 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#error
+
+#ifndef _CLOG_CONFIG_
+#define _CLOG_CONFIG_
+
 /* VALUES DEFINITION START */
 #define CLOG_PRINT_DETAILS_ID_DEFAULT 0
 #define CLOG_PRINT_DETAILS_ID_USER    1
@@ -53,3 +56,5 @@
 #define CLOG_COLOR_DEBUG    CLOG_COLOR_BLUE
 #define CLOG_COLOR_TRACE    CLOG_COLOR_WHITE
 #define CLOG_COLOR_DEFAULT  CLOG_COLOR_DEF
+
+#endif /* _CLOG_CONFIG_ */

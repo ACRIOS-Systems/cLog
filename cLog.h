@@ -6,6 +6,9 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+#ifndef _CLOG_
+#define _CLOG_
+
 #include "cLog_config.h"
 #include <stdint.h>
 
@@ -166,3 +169,5 @@ extern char *s_cLogLevelToColors[CLOG_VAL_LEN];
 void cLog_print_details(const CLogger_t *                                     logger,
                         CLogLevel_t logLevel CLOG_PRINT_DETAILS_FILENAME_TYPE CLOG_PRINT_DETAILS_LINENUMBER_TYPE);
 #endif
+
+#endif /* _CLOG_ */
