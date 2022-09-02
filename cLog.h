@@ -73,7 +73,7 @@ typedef enum
 
 typedef struct
 {
-    char *      logName;
+    const char *      logName;
     CLogLevel_t logLevel;
 } CLogger_t;
 
