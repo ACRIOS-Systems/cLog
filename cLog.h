@@ -77,8 +77,8 @@ typedef struct
     CLogLevel_t logLevel;
 } CLogger_t;
 
-extern char *s_cLogLevelToString[CLOG_VAL_LEN];
-extern char *s_cLogLevelToColors[CLOG_VAL_LEN];
+extern const char *s_cLogLevelToString[CLOG_VAL_LEN];
+extern const char *s_cLogLevelToColors[CLOG_VAL_LEN];
 
 #define CLOG_SET_LOGNAME(logger, name)   (logger)->logName = (name);
 #define CLOG_SET_LOGLEVEL(logger, level) (logger)->logLevel = (level);

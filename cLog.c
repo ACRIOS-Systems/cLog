@@ -8,10 +8,10 @@
 
 #include "cLog.h"
 
-char *s_cLogLevelToString[CLOG_VAL_LEN] = { CLOG_STR_NONE,       CLOG_STRING_CRITICAL, CLOG_STRING_ERROR,
+const char *s_cLogLevelToString[CLOG_VAL_LEN] = { CLOG_STR_NONE,       CLOG_STRING_CRITICAL, CLOG_STRING_ERROR,
                                             CLOG_STRING_WARNING, CLOG_STRING_INFO,     CLOG_STRING_DEBUG,
                                             CLOG_STRING_TRACE };
-char *s_cLogLevelToColors[CLOG_VAL_LEN] = { CLOG_COLOR_DEFAULT, CLOG_COLOR_CRITICAL, CLOG_COLOR_ERROR,
+const char *s_cLogLevelToColors[CLOG_VAL_LEN] = { CLOG_COLOR_DEFAULT, CLOG_COLOR_CRITICAL, CLOG_COLOR_ERROR,
                                             CLOG_COLOR_WARNING, CLOG_COLOR_INFO,     CLOG_COLOR_DEBUG,
                                             CLOG_COLOR_TRACE };
 
