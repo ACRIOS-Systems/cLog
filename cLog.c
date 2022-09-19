@@ -44,15 +44,15 @@ void cLog_print_details(const CLogger_t *                                     lo
 #        endif
 #        if defined(CLOG_PRINT_DETAILS_FILENAME_TYPE) && defined(CLOG_PRINT_DETAILS_LINENUMBER_TYPE)
     CLOG_PRINT_FUNC("%04d.%02d.%02d %02d:%02d:%02d>%s%s%s>%s>%s>%d:", 1900+tm_info->tm_year, tm_info->tm_mon, tm_info->tm_mday,
-                    tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, s_cLogLevelToColors[logLevel], s_cLogLevelToString[logLevel], s_cLogLevelToColors[0],
+                    tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, s_cLogLevelToColors[logLevel], s_cLogLevelToString[logLevel], s_cLogLevelToColors[CLOG_VAL_NONE],
                     logger->logName, fName, lineNumber);
 #        elif defined(CLOG_PRINT_DETAILS_FILENAME_TYPE)
     CLOG_PRINT_FUNC("%04d.%02d.%02d %02d:%02d:%02d>%s%s%s>%s>%s:", 1900+tm_info->tm_year, tm_info->tm_mon, tm_info->tm_mday,
-                    tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, s_cLogLevelToColors[logLevel], s_cLogLevelToString[logLevel], s_cLogLevelToColors[0],
+                    tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, s_cLogLevelToColors[logLevel], s_cLogLevelToString[logLevel], s_cLogLevelToColors[CLOG_VAL_NONE],
                     logger->logName, fName);
 #        else
     CLOG_PRINT_FUNC("%04d.%02d.%02d %02d:%02d:%02d>%s%s%s>%s>%d:", 1900+tm_info->tm_year, tm_info->tm_mon, tm_info->tm_mday,
-                    tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, s_cLogLevelToColors[logLevel], s_cLogLevelToString[logLevel], s_cLogLevelToColors[0], logger->logName,
+                    tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, s_cLogLevelToColors[logLevel], s_cLogLevelToString[logLevel], s_cLogLevelToColors[CLOG_VAL_NONE], logger->logName,
                     lineNumber);
 #        endif
 }
