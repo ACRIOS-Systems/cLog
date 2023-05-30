@@ -59,31 +59,17 @@ void cLog_print(const CLogger_t *logger,
     time(&timer);
     tm_info = localtime(&timer);
 #        ifdef CLOG_PRINT_DETAILS_FILENAME_TYPE
-    const char *fName = NULL;
-
-#            ifdef __FILENAME__
-    fName = fileName;
-#            else
-    if (fName == NULL)
-    {
-        fName = fileName;
-    }
-    else
-    {
-        fName = &(fName[1]);
-    }
-#            endif
 #        endif
 #        if defined(CLOG_PRINT_DETAILS_FILENAME_TYPE) && defined(CLOG_PRINT_DETAILS_LINENUMBER_TYPE)
-    printf("\r\n%04d.%02d.%02d %02d:%02d:%02d>%s%s%s>%s>%s>%d:", 1900 + tm_info->tm_year, tm_info->tm_mon,
+    printf("\r\n%04d.%02d.%02d %02d:%02d:%02d>%s%s%s>%s>%s>%d:", (1900 + tm_info->tm_year), (tm_info->tm_mon + 1),
            tm_info->tm_mday, tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, colour, level,
-           s_cLogLevelToColors[CLOG_VAL_NONE], logger->logName, fName, lineNumber);
+           s_cLogLevelToColors[CLOG_VAL_NONE], logger->logName, fileName, lineNumber);
 #        elif defined(CLOG_PRINT_DETAILS_FILENAME_TYPE)
-    printf("\r\n%04d.%02d.%02d %02d:%02d:%02d>%s%s%s>%s>%s:", 1900 + tm_info->tm_year, tm_info->tm_mon,
+    printf("\r\n%04d.%02d.%02d %02d:%02d:%02d>%s%s%s>%s>%s:", (1900 + tm_info->tm_year), (tm_info->tm_mon + 1),
            tm_info->tm_mday, tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, colour, level,
-           s_cLogLevelToColors[CLOG_VAL_NONE], logger->logName, fName);
+           s_cLogLevelToColors[CLOG_VAL_NONE], logger->logName, fileName);
 #        else
-    printf("\r\n%04d.%02d.%02d %02d:%02d:%02d>%s%s%s>%s>%d:", 1900 + tm_info->tm_year, tm_info->tm_mon,
+    printf("\r\n%04d.%02d.%02d %02d:%02d:%02d>%s%s%s>%s>%d:", (1900 + tm_info->tm_year), (tm_info->tm_mon + 1),
            tm_info->tm_mday, tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, colour, level,
            s_cLogLevelToColors[CLOG_VAL_NONE], logger->logName, lineNumber);
 #        endif
