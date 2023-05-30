@@ -1,5 +1,5 @@
 /*
- * Copyright  2019 ACRIOS Systems
+ * Copyright  2019-2023 ACRIOS Systems
  * All rights reserved.
  *
  *
@@ -10,53 +10,42 @@
 #define _CLOG_
 
 #include "cLog_config.h"
+#include <stdarg.h>
 #include <stdint.h>
 
 /* Do not change code bellow */
 
-#if defined(CLOG_PRINT_DETAILS_ID)
-#    if defined(CLOG_PRINT_DETAILS_USE_FILENAME)
-#        define CLOG_PRINT_DETAILS_FILENAME_TYPE , const char *fileName
-#    else
-#        define CLOG_PRINT_DETAILS_FILENAME_TYPE
-#    endif
-
-#    if defined(CLOG_PRINT_DETAILS_USE_LINENUMBER)
-#        define CLOG_PRINT_DETAILS_LINENUMBER_TYPE , uint32_t lineNumber
-#    else
-#        define CLOG_PRINT_DETAILS_LINENUMBER_TYPE
-#    endif
-#    if defined(CLOG_PRINT_DETAILS_USE_FILENAME) && defined(CLOG_PRINT_DETAILS_USE_LINENUMBER)
-#        define CLOG_PRINT_DETAILS(logger, logLevel, fileName, lineNumber) \
-            cLog_print_details(logger, logLevel, fileName, lineNumber)
-
-#    elif defined(CLOG_PRINT_DETAILS_USE_FILENAME)
-#        define CLOG_PRINT_DETAILS(logger, logLevel, fileName, lineNumber) \
-            cLog_print_details(logger, logLevel, fileName)
-
-#    else
-#        define CLOG_PRINT_DETAILS(logger, logLevel, fileName, lineNumber) \
-            cLog_print_details(logger, logLevel, lineNumber)
-
-#    endif
-
+#if defined(CLOG_PRINT_DETAILS_USE_FILENAME)
+#    define CLOG_PRINT_DETAILS_FILENAME_TYPE , const char *fileName
+#    define CLOG_PRINT_DETAILS_FILENAME      , fileName
 #else
-#    define CLOG_PRINT_DETAILS(logger, logLevel, fileName, lineNumber)
+#    define CLOG_PRINT_DETAILS_FILENAME_TYPE
+#    define CLOG_PRINT_DETAILS_FILENAME
 #endif
 
-#if CLOG_PRINT_FUNC_ID == CLOG_PRINT_FUNC_ID_STDLIB
-#    define CLOG_PRINT_FUNC(...) (void)printf(__VA_ARGS__)
-#    include <stdio.h>
-#elif CLOG_PRINT_FUNC_ID == CLOG_PRINT_FUNC_ID_NXP
-#    define CLOG_PRINT_FUNC(...) (void)PRINTF(__VA_ARGS__)
-#    include <fsl_debug_console.h>
+#if defined(CLOG_PRINT_DETAILS_USE_LINENUMBER)
+#    define CLOG_PRINT_DETAILS_LINENUMBER_TYPE , uint32_t lineNumber
+#    define CLOG_PRINT_DETAILS_LINENUMBER      , lineNumber
 #else
-#    define CLOG_PRINT_FUNC(...)
+#    define CLOG_PRINT_DETAILS_LINENUMBER_TYPE
+#    define CLOG_PRINT_DETAILS_LINENUMBER
+#endif
+#if defined(CLOG_PRINT_DETAILS_USE_FILENAME) && defined(CLOG_PRINT_DETAILS_USE_LINENUMBER)
+#    define CLOG_PRINT_DETAILS(logger, logLevel, fileName, lineNumber, ...) \
+        _cLog_print(logger, logLevel, fileName, lineNumber, __VA_ARGS__);
+
+#elif defined(CLOG_PRINT_DETAILS_USE_FILENAME)
+#    define CLOG_PRINT_DETAILS(logger, logLevel, fileName, lineNumber, ...) \
+        _cLog_print(logger, logLevel, fileName, __VA_ARGS__);
+
+#else
+#    define CLOG_PRINT_DETAILS(logger, logLevel, fileName, lineNumber, ...) \
+        _cLog_print(logger, logLevel, lineNumber, __VA_ARGS__);
+
 #endif
 
-#define CLOG_LOG(logger, logLevel, fileName, lineNumber, ...)   \
-    CLOG_PRINT_DETAILS(logger, logLevel, fileName, lineNumber); \
-    CLOG_PRINT_FUNC(__VA_ARGS__);
+#define CLOG_LOG(logger, logLevel, fileName, lineNumber, ...) \
+    CLOG_PRINT_DETAILS(logger, logLevel, fileName, lineNumber, __VA_ARGS__);
 
 /* cLog declarations bellow */
 typedef enum
@@ -73,7 +62,7 @@ typedef enum
 
 typedef struct
 {
-    const char *      logName;
+    const char *logName;
     CLogLevel_t logLevel;
 } CLogger_t;
 
@@ -93,81 +82,46 @@ extern const char *s_cLogLevelToColors[CLOG_VAL_LEN];
 #    define __CUSTOM_FILENAME__ __FILE__
 #endif
 
-#define CLOG_CRITICAL(logger, ...)                                                      \
-    if (logger->logLevel >= CLOG_VAL_CRITICAL)                                          \
-    {                                                                                   \
-        CLOG_LOG(logger, CLOG_VAL_CRITICAL, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__) \
-    }
+#define CLOG_CRITICAL(logger, ...) CLOG_LOG(logger, CLOG_VAL_CRITICAL, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__)
 
-#define CLOG_CRITICAL_LOG_ONLY(logger, ...)    \
-    if (logger->logLevel >= CLOG_VAL_CRITICAL) \
-    {                                          \
-        CLOG_PRINT_FUNC(__VA_ARGS__);          \
-    }
+#define CLOG_CRITICAL_LOG_ONLY(logger, ...) _cLog_print_pure(logger, CLOG_VAL_CRITICAL, __VA_ARGS__);
 
-#define CLOG_ERROR(logger, ...)                                                      \
-    if (logger->logLevel >= CLOG_VAL_ERROR)                                          \
-    {                                                                                \
-        CLOG_LOG(logger, CLOG_VAL_ERROR, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__) \
-    }
+#define CLOG_ERROR(logger, ...) CLOG_LOG(logger, CLOG_VAL_ERROR, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__)
 
-#define CLOG_ERROR_LOG_ONLY(logger, ...)    \
-    if (logger->logLevel >= CLOG_VAL_ERROR) \
-    {                                       \
-        CLOG_PRINT_FUNC(__VA_ARGS__);       \
-    }
+#define CLOG_ERROR_LOG_ONLY(logger, ...) _cLog_print_pure(logger, CLOG_VAL_ERROR, __VA_ARGS__);
 
-#define CLOG_WARNING(logger, ...)                                                      \
-    if (logger->logLevel >= CLOG_VAL_WARNING)                                          \
-    {                                                                                  \
-        CLOG_LOG(logger, CLOG_VAL_WARNING, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__) \
-    }
+#define CLOG_WARNING(logger, ...) CLOG_LOG(logger, CLOG_VAL_WARNING, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__)
 
-#define CLOG_WARNING_LOG_ONLY(logger, ...)    \
-    if (logger->logLevel >= CLOG_VAL_WARNING) \
-    {                                         \
-        CLOG_PRINT_FUNC(__VA_ARGS__);         \
-    }
+#define CLOG_WARNING_LOG_ONLY(logger, ...) _cLog_print_pure(logger, CLOG_VAL_WARNING, __VA_ARGS__);
 
-#define CLOG_INFO(logger, ...)                                                      \
-    if (logger->logLevel >= CLOG_VAL_INFO)                                          \
-    {                                                                               \
-        CLOG_LOG(logger, CLOG_VAL_INFO, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__) \
-    }
+#define CLOG_INFO(logger, ...) CLOG_LOG(logger, CLOG_VAL_INFO, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__)
 
-#define CLOG_INFO_LOG_ONLY(logger, ...)    \
-    if (logger->logLevel >= CLOG_VAL_INFO) \
-    {                                      \
-        CLOG_PRINT_FUNC(__VA_ARGS__);      \
-    }
+#define CLOG_INFO_LOG_ONLY(logger, ...) _cLog_print_pure(logger, CLOG_VAL_INFO, __VA_ARGS__);
 
-#define CLOG_DEBUG(logger, ...)                                                      \
-    if (logger->logLevel >= CLOG_VAL_DEBUG)                                          \
-    {                                                                                \
-        CLOG_LOG(logger, CLOG_VAL_DEBUG, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__) \
-    }
+#define CLOG_DEBUG(logger, ...) CLOG_LOG(logger, CLOG_VAL_DEBUG, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__)
 
-#define CLOG_DEBUG_LOG_ONLY(logger, ...)    \
-    if (logger->logLevel >= CLOG_VAL_DEBUG) \
-    {                                       \
-        CLOG_PRINT_FUNC(__VA_ARGS__);       \
-    }
+#define CLOG_DEBUG_LOG_ONLY(logger, ...) _cLog_print_pure(logger, CLOG_VAL_DEBUG, __VA_ARGS__);
 
-#define CLOG_TRACE(logger, ...)                                                      \
-    if (logger->logLevel >= CLOG_VAL_TRACE)                                          \
-    {                                                                                \
-        CLOG_LOG(logger, CLOG_VAL_TRACE, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__) \
-    }
+#define CLOG_TRACE(logger, ...) CLOG_LOG(logger, CLOG_VAL_TRACE, __CUSTOM_FILENAME__, __LINE__, __VA_ARGS__)
 
-#define CLOG_TRACE_LOG_ONLY(logger, ...)    \
-    if (logger->logLevel >= CLOG_VAL_TRACE) \
-    {                                       \
-        CLOG_PRINT_FUNC(__VA_ARGS__);       \
-    }
+#define CLOG_TRACE_LOG_ONLY(logger, ...) _cLog_print_pure(logger, CLOG_VAL_TRACE, __VA_ARGS__);
 
-#if defined(CLOG_PRINT_DETAILS_ID)
-void cLog_print_details(const CLogger_t *                                     logger,
-                        CLogLevel_t logLevel CLOG_PRINT_DETAILS_FILENAME_TYPE CLOG_PRINT_DETAILS_LINENUMBER_TYPE);
-#endif
+/* clog calls*/
+void _cLog_print(const CLogger_t                                      *logger,
+                 CLogLevel_t logLevel CLOG_PRINT_DETAILS_FILENAME_TYPE CLOG_PRINT_DETAILS_LINENUMBER_TYPE,
+                 const char                                           *msg,
+                 ...);
+
+void _cLog_print_pure(const CLogger_t *logger, CLogLevel_t logLevel, const char *msg, ...);
+
+
+/* user defined clog calls */
+void cLog_print(const CLogger_t                                   *logger,
+                const char                                        *colour,
+                const char *level CLOG_PRINT_DETAILS_FILENAME_TYPE CLOG_PRINT_DETAILS_LINENUMBER_TYPE,
+                const char                                        *msg,
+                va_list                                            ap);
+
+void cLog_print_pure(const char *msg, va_list ap);
 
 #endif /* _CLOG_ */
